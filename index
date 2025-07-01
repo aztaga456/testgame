@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar Membaca, Mengeja, dan Menulis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #f3e8ff 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+            flex-direction: column;
+            gap: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .hidden { display: none; }
+        .visible { display: flex; }
+        .header {
+            color: #3b82f6;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+        
+        /* Home Screen Styles */
+        #homeScreen .bismillah-text {
+            font-size: 1.75rem;
+            font-family: 'Times New Roman', serif;
+            color: #4b5563;
+            margin-bottom: 1rem;
+        }
+        #homeScreen .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        @media (min-width: 768px) {
+            #homeScreen .menu-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        #homeScreen .menu-card {
+            border-radius: 15px;
+            padding: 30px 20px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            color: white;
+        }
+        #homeScreen .menu-card:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.15);
+        }
+        #homeScreen .menu-card-1 { background-color: #2dd4bf; } /* Teal */
+        #homeScreen .menu-card-2 { background-color: #f472b6; } /* Pink */
+        #homeScreen .menu-card-3 { background-color: #a78bfa; } /* Violet */
+        #homeScreen .menu-card-1:hover { background-color: #14b8a6; }
+        #homeScreen .menu-card-2:hover { background-color: #ec4899; }
+        #homeScreen .menu-card-3:hover { background-color: #8b5cf6; }
+
+        #homeScreen .menu-card .emoji {
+             font-size: 2.5rem;
+        }
+
+        /* Spelling App Styles */
+        .alphabet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 15px; margin-bottom: 20px;
+        }
+        .letter-card {
+            background-color: #93c5fd; color: #ffffff;
+            font-size: 3rem; font-weight: 700;
+            border-radius: 15px; cursor: pointer;
+            transition: all 0.2s;
+            display: flex; justify-content: center; align-items: center;
+            aspect-ratio: 1 / 1;
+        }
+        .letter-card:hover { transform: scale(1.05); background-color: #60a5fa; }
+        .spelling-section { background-color: #dbeafe; border-radius: 15px; padding: 25px; }
+        .spelling-display {
+            background-color: #eff6ff; border-radius: 10px;
+            min-height: 80px;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 3.5rem; font-weight: 700; color: #1e3a8a;
+            margin-bottom: 20px; padding: 10px;
+            overflow-x: auto; text-transform: none; word-break: break-all;
+        }
+        .case-toggle-buttons { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        .case-btn {
+            background-color: #e0e7ff; color: #3730a3;
+            padding: 10px 20px; border-radius: 8px;
+            font-size: 1rem; font-weight: 600;
+            cursor: pointer; border: 2px solid transparent; transition: all 0.2s;
+        }
+        .case-btn:hover { background-color: #c7d2fe; }
+        .case-btn.active { background-color: #3b82f6; color: white; }
+        
+        /* Writing App Styles */
+        #writingCanvas {
+            border: 2px dashed #93c5fd; border-radius: 15px;
+            cursor: crosshair; touch-action: none;
+            width: 100%; aspect-ratio: 16 / 9;
+        }
+        .writing-alphabet-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+            gap: 10px; margin-bottom: 20px;
+        }
+        .writing-letter-btn {
+             background-color: #bfdbfe; color: #1e3a8a;
+             border-radius: 10px; font-size: 1.5rem; font-weight: 600;
+             cursor: pointer; transition: background-color 0.2s; padding: 10px;
+        }
+        .writing-letter-btn:hover, .writing-letter-btn.active { background-color: #3b82f6; color: white; }
+        
+        /* Matching Game Styles */
+        #matchingGameArea { display: flex; justify-content: space-around; width: 100%; margin-bottom: 20px; }
+        .matching-col { display: flex; flex-direction: column; gap: 10px; }
+        .match-card {
+            width: 80px; height: 80px;
+            font-size: 2.5rem; font-weight: 700;
+            display: flex; justify-content: center; align-items: center;
+            border-radius: 10px; cursor: pointer;
+            transition: all 0.3s ease; border: 3px solid transparent;
+        }
+        .match-card.upper { background-color: #60a5fa; color: white; }
+        .match-card.lower { background-color: #f9a8d4; color: white; }
+        .match-card.selected { border-color: #f59e0b; transform: scale(1.08); }
+        .match-card.correct { background-color: #34d399 !important; border-color: #059669; transform: scale(1.05); }
+        .match-card.incorrect { background-color: #f87171 !important; border-color: #dc2626; transform: scale(0.95); }
+        .match-card.matched { opacity: 0.5; cursor: default; background-color: #d1d5db !important; }
+        #matchWinMessage { flex-direction: column; gap: 15px; }
+
+        /* General Button Styles */
+        .action-buttons button, .back-button {
+            background-color: #10b981; color: white;
+            padding: 15px 30px; border-radius: 10px;
+            font-size: 1.2rem; font-weight: 600;
+            cursor: pointer; transition: background-color 0.2s;
+            margin: 5px; border: none;
+        }
+        .action-buttons button:hover, .back-button:hover { background-color: #059669; }
+        .action-buttons .clear-btn { background-color: #ef4444; }
+        .action-buttons .clear-btn:hover { background-color: #dc2626; }
+        .back-button { background-color: #f59e0b; }
+        .back-button:hover { background-color: #d97706; }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .container { padding: 15px; }
+            .header { font-size: 1.8rem; }
+            #homeScreen .menu-card { font-size: 1rem; }
+            .letter-card, .match-card { font-size: 2rem; }
+            .match-card { width: 60px; height: 60px; }
+            .spelling-display { font-size: 2rem; }
+            .action-buttons button, .back-button { padding: 10px 15px; font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="homeScreen" class="container visible">
+        <p class="bismillah-text">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
+        <h1 class="header">Selamat Belajar!</h1>
+        <p class="text-lg text-gray-600 mb-8">Pilih aktivitas belajar yang kamu suka.</p>
+        <div class="menu-grid">
+            <div class="menu-card menu-card-1" onclick="showApp('spellingApp')">
+                <span class="emoji">✏️</span> Belajar Mengeja
+            </div>
+            <div class="menu-card menu-card-2" onclick="showApp('writingApp')">
+                <span class="emoji">✍️</span> Latihan Menulis
+            </div>
+            <div class="menu-card menu-card-3" onclick="showApp('matchingApp')">
+                <span class="emoji">🧩</span> Mencocokkan Huruf
+            </div>
+        </div>
+    </div>
+
+    <div id="spellingApp" class="container hidden">
+        <button class="back-button self-start" onclick="showApp('homeScreen')">🏠 Kembali</button>
+        <h1 class="header">Ayo Belajar Mengeja!</h1>
+        <div class="case-toggle-buttons">
+            <button id="upperCaseBtn" onclick="setSpellingCase(true)" class="case-btn">Huruf Besar</button>
+            <button id="lowerCaseBtn" onclick="setSpellingCase(false)" class="case-btn">Huruf Kecil</button>
+        </div>
+        <div class="alphabet-grid" id="alphabetGrid"></div>
+        <div class="spelling-section">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">Eja Katanya:</h2>
+            <div class="spelling-display" id="spellingDisplay"></div>
+            <div class="action-buttons">
+                <button onclick="speakSpelledWord()">Ucapkan Kata</button>
+                <button class="clear-btn" onclick="resetSpelling()">Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="writingApp" class="container hidden">
+        <button class="back-button self-start" onclick="showApp('homeScreen')">🏠 Kembali</button>
+        <h1 class="header">Ayo Latihan Menulis!</h1>
+        <p class="text-gray-600">Pilih huruf, lalu coba tulis di kanvas!</p>
+        <div class="writing-alphabet-grid" id="writingAlphabetGrid"></div>
+        <canvas id="writingCanvas"></canvas>
+        <div class="action-buttons">
+            <button class="clear-btn" onclick="clearCanvas()">Bersihkan Kanvas</button>
+        </div>
+    </div>
+
+    <div id="matchingApp" class="container hidden">
+        <button class="back-button self-start" onclick="showApp('homeScreen')">🏠 Kembali</button>
+        <div id="matchGameContainer" class="visible w-full flex-col items-center gap-4">
+            <h1 class="header">Mencocokkan Huruf</h1>
+            <p class="text-gray-600">Pasangkan huruf besar di kiri dengan huruf kecil di kanan.</p>
+            <div id="matchingGameArea">
+                <div id="upperCaseCol" class="matching-col"></div>
+                <div id="lowerCaseCol" class="matching-col"></div>
+            </div>
+        </div>
+        <div id="matchWinMessage" class="hidden w-full items-center">
+             <h1 class="header text-green-500">🎉 Hebat! 🎉</h1>
+             <p class="text-xl text-gray-700">Kamu berhasil mencocokkan semua huruf!</p>
+             <button onclick="initMatchingGame()" class="action-buttons">Main Lagi</button>
+        </div>
+    </div>
+
+    <script>
+        const alphabetUpper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+        const alphabetLower = 'abcdefghijklmnopqrstuvwxyz'.split('');
+        
+        function speakText(text) {
+            if (!text || typeof SpeechSynthesisUtterance === 'undefined') { return; }
+            speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'id-ID';
+            utterance.rate = 0.9;
+            speechSynthesis.speak(utterance);
+        }
+        
+        function showApp(appId) {
+            document.querySelectorAll('.container').forEach(c => c.classList.replace('visible', 'hidden'));
+            document.getElementById(appId).classList.replace('hidden', 'visible');
+            if (appId === 'writingApp') { resizeCanvas(); }
+            if (appId === 'matchingApp') { initMatchingGame(); }
+            if (appId === 'homeScreen') {
+                resetSpelling();
+                currentGuideLetter = ''; clearCanvas();
+                const activeBtn = document.querySelector('.writing-letter-btn.active');
+                if (activeBtn) { activeBtn.classList.remove('active'); }
+            }
+        }
+
+        const alphabetGrid = document.getElementById('alphabetGrid');
+        const spellingDisplay = document.getElementById('spellingDisplay');
+        let currentSpelling = '';
+        let isSpellingUppercase = true;
+        function setSpellingCase(isUpper) {
+            isSpellingUppercase = isUpper;
+            document.getElementById('upperCaseBtn').classList.toggle('active', isUpper);
+            document.getElementById('lowerCaseBtn').classList.toggle('active', !isUpper);
+            createSpellingLetterCards();
+            resetSpelling();
+        }
+        function createSpellingLetterCards() {
+            alphabetGrid.innerHTML = '';
+            const currentAlphabet = isSpellingUppercase ? alphabetUpper : alphabetLower;
+            currentAlphabet.forEach(letter => {
+                const letterCard = document.createElement('div');
+                letterCard.className = 'letter-card';
+                letterCard.textContent = letter;
+                letterCard.onclick = () => handleLetterClick(letter);
+                alphabetGrid.appendChild(letterCard);
+            });
+        }
+        function handleLetterClick(letter) {
+            speakText(letter);
+            currentSpelling += letter;
+            spellingDisplay.textContent = currentSpelling;
+        }
+        function speakSpelledWord() { if (currentSpelling) speakText(currentSpelling); }
+        function resetSpelling() { currentSpelling = ''; spellingDisplay.textContent = ''; }
+
+        const canvas = document.getElementById('writingCanvas');
+        const ctx = canvas.getContext('2d');
+        const writingAlphabetGrid = document.getElementById('writingAlphabetGrid');
+        let isDrawing = false, lastX = 0, lastY = 0, currentGuideLetter = '';
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientWidth * 9 / 16;
+            drawLetterGuide(currentGuideLetter);
+        }
+        function startDrawing(e) { isDrawing = true; [lastX, lastY] = getMousePos(canvas, e); }
+        function draw(e) {
+            if (!isDrawing) return;
+            e.preventDefault();
+            const [x, y] = getMousePos(canvas, e);
+            ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(x, y);
+            ctx.strokeStyle = '#1e3a8a'; ctx.lineWidth = 12; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+            ctx.stroke();
+            [lastX, lastY] = [x, y];
+        }
+        function stopDrawing() { isDrawing = false; }
+        function getMousePos(canvas, evt) {
+            const rect = canvas.getBoundingClientRect();
+            if (evt.touches && evt.touches.length > 0) return [evt.touches[0].clientX - rect.left, evt.touches[0].clientY - rect.top];
+            return [evt.clientX - rect.left, evt.clientY - rect.top];
+        }
+        function drawLetterGuide(letter) {
+            currentGuideLetter = letter;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (!letter) return;
+            ctx.font = `bold ${canvas.height * 0.8}px 'Baloo 2', cursive`;
+            ctx.fillStyle = 'rgba(147, 197, 253, 0.3)';
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText(letter, canvas.width / 2, canvas.height / 2 + (canvas.height * 0.05));
+        }
+        function clearCanvas() { drawLetterGuide(currentGuideLetter); }
+        function createWritingLetterButtons() {
+            alphabetUpper.forEach(letter => {
+                const letterBtn = document.createElement('button');
+                letterBtn.className = 'writing-letter-btn';
+                letterBtn.textContent = letter;
+                letterBtn.onclick = () => {
+                    speakText(letter);
+                    drawLetterGuide(letter);
+                    document.querySelectorAll('.writing-letter-btn.active').forEach(b => b.classList.remove('active'));
+                    letterBtn.classList.add('active');
+                };
+                writingAlphabetGrid.appendChild(letterBtn);
+            });
+        }
+        
+        const upperCaseCol = document.getElementById('upperCaseCol');
+        const lowerCaseCol = document.getElementById('lowerCaseCol');
+        const matchWinMessage = document.getElementById('matchWinMessage');
+        const matchGameContainer = document.getElementById('matchGameContainer');
+        let selectedUpperCard = null, matchedPairs = 0, totalPairs = 0;
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+        function initMatchingGame() {
+            matchGameContainer.classList.replace('hidden', 'visible');
+            matchWinMessage.classList.replace('visible', 'hidden');
+            upperCaseCol.innerHTML = ''; lowerCaseCol.innerHTML = '';
+            selectedUpperCard = null; matchedPairs = 0;
+            const gameLetters = shuffle([...alphabetUpper]).slice(0, 6);
+            totalPairs = gameLetters.length;
+            const shuffledUpper = [...gameLetters];
+            const shuffledLower = shuffle([...gameLetters]).map(l => l.toLowerCase());
+            shuffledUpper.forEach(letter => createMatchCard(letter, upperCaseCol, true));
+            shuffledLower.forEach(letter => createMatchCard(letter, lowerCaseCol, false));
+        }
+        function createMatchCard(letter, column, isUpper) {
+            const card = document.createElement('div');
+            card.className = isUpper ? 'match-card upper' : 'match-card lower';
+            card.textContent = letter;
+            card.dataset.letter = letter.toLowerCase();
+            card.onclick = handleMatchCardClick;
+            column.appendChild(card);
+        }
+        function handleMatchCardClick(event) {
+            const clickedCard = event.currentTarget;
+            if (clickedCard.classList.contains('matched') || clickedCard.classList.contains('selected')) return;
+            if (clickedCard.classList.contains('upper')) {
+                if (selectedUpperCard) selectedUpperCard.classList.remove('selected');
+                selectedUpperCard = clickedCard;
+                clickedCard.classList.add('selected');
+                speakText(clickedCard.textContent);
+            } else if (clickedCard.classList.contains('lower') && selectedUpperCard) {
+                const upperLetter = selectedUpperCard.dataset.letter;
+                const lowerLetter = clickedCard.dataset.letter;
+                if (upperLetter === lowerLetter) {
+                    speakText("Benar");
+                    selectedUpperCard.classList.add('correct');
+                    clickedCard.classList.add('correct');
+                    setTimeout(() => {
+                        selectedUpperCard.classList.replace('correct','matched');
+                        clickedCard.classList.replace('correct','matched');
+                        selectedUpperCard.onclick = null; clickedCard.onclick = null;
+                        selectedUpperCard = null; matchedPairs++;
+                        if (matchedPairs === totalPairs) {
+                           setTimeout(() => {
+                                matchGameContainer.classList.replace('visible', 'hidden');
+                                matchWinMessage.classList.replace('hidden', 'visible');
+                           }, 500);
+                        }
+                    }, 500);
+                } else {
+                    speakText("Salah");
+                    selectedUpperCard.classList.add('incorrect');
+                    clickedCard.classList.add('incorrect');
+                    setTimeout(() => {
+                        selectedUpperCard.classList.remove('incorrect', 'selected');
+                        clickedCard.classList.remove('incorrect');
+                        selectedUpperCard = null;
+                    }, 800);
+                }
+            }
+        }
+        
+        window.onload = () => {
+            setSpellingCase(true);
+            createWritingLetterButtons();
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseleave', stopDrawing);
+            canvas.addEventListener('touchstart', startDrawing, { passive: false });
+            canvas.addEventListener('touchmove', draw, { passive: false });
+            canvas.addEventListener('touchend', stopDrawing);
+            window.addEventListener('resize', resizeCanvas);
+        };
+    </script>
+</body>
+</html>
